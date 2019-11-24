@@ -1,0 +1,40 @@
+create flow travel_agency_a;
+\cw travel_agency_a;
+begin;
+
+create wed-attribute customer_id;
+create wed-attribute customer_status;
+create wed-attribute air_ticket_id;
+create wed-attribute air_ticket_status;
+create wed-attribute hotel_id;
+create wed-attribute hotel_status;
+create wed-attribute car_id;
+create wed-attribute car_status;
+create wed-attribute order_id;
+create wed-attribute order_status;
+
+create wed-condition c_new_travel_request as (customer_status = 'Not Validated' AND order_status = 'Received');
+create wed-condition c_hotel_requested as (hotel_status = 'Requested' AND order_status = 'Validated' AND air_ticket_status = 'Purchased');
+create wed-condition c_air_ticket_requested as (air_ticket_status = 'Requested' AND order_status = 'Validated');
+create wed-condition c_car_requested as (car_status = 'Requested' AND order_status = 'Validated' AND air_ticket_status = 'Purchased' AND hotel_status = 'Reserved');
+create wed-condition c_request_treated as (hotel_status = 'Reserved' AND air_ticket_status = 'Purchased' AND car_status = 'Reserved' AND order_status = 'Validated');
+create wed-condition c_order_finalized as (customer_status = 'Validated' AND air_ticket_status = 'Purchased' AND hotel_status = 'Reserved' AND car_status = 'Reserved' AND order_status = 'Finalized');
+
+create wed-transition t_validate_travel_request stop on timeout '1h';
+create wed-transition t_buy_air_ticket;
+create wed-transition t_reserve_hotel;
+create wed-transition t_reserve_car;
+create wed-transition t_close_travel_request;
+
+create wed-trigger wed_trigger1 as (c_new_travel_request, t_validate_travel_request);
+create wed-trigger wed_trigger2 as (c_hotel_requested, t_reserve_hotel);
+create wed-trigger wed_trigger3 as (c_air_ticket_requested, t_buy_air_ticket);
+create wed-trigger wed_trigger4 as (c_request_treated, t_close_travel_request);
+create wed-trigger wed_trigger5 as (c_car_requested, t_reserve_car);
+
+set final wed-state as (customer_status = 'Validated' AND air_ticket_status = 'Purchased' AND hotel_status = 'Reserved' AND order_status = 'Finalized');
+
+commit;
+
+--create instance as (customer_status, order_status) values ('Not Vali
+ated', 'Received');

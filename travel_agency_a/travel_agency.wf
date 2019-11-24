@@ -1,0 +1,36 @@
+@WED-attributes
+A = {customer_id, customer_status, air_ticket_id, air_ticket_status, hotel_id, hotel_status, car_id, car_status, order_id, order_status};
+
+@WED-conditions
+C = {c_new_travel_request, c_hotel_requested, c_air_ticket_requested, c_car_requested, c_request_treated, c_order_finalized};
+
+c_new_travel_request: (customer_status = 'Not Validated' AND order_status = 'Received');
+c_hotel_requested: (hotel_status = 'Requested' AND order_status = 'Validated');
+c_air_ticket_requested: (air_ticket_status = 'Requested' AND order_status = 'Validated');
+c_car_requested: (car_status = 'Requested' AND order_status = 'Validated');
+c_request_treated: (hotel_status = 'Reserved' AND air_ticket_status = 'Purchased' AND car_status = 'Reserved' AND order_status = 'Validated');
+c_order_finalized: (customer_status = 'Validated' AND air_ticket_status = 'Purchased' AND hotel_status = 'Reserved' AND car_status = 'Reserved' AND order_status = 'Finalized');
+
+@WED-transitions
+T = {t_validate_travel_request, t_buy_air_ticket, t_reserve_hotel, t_reserve_car, t_close_travel_request};
+
+t_validate_travel_request: {customer_status, order_status, air_ticket_status, hotel_status};
+t_buy_air_ticket: {air_ticket_status, air_ticket_id};
+t_reserve_hotel: {hotel_status, hotel_id};
+t_reserve_car: {car_status, car_id};
+t_close_travel_request: {order_status};
+
+@WED-triggers
+G = {wed_trigger1, wed_trigger2, wed_trigger3, wed_trigger4};
+
+wed_trigger1 : (c_new_travel_request, t_validate_travel_request);
+wed_trigger2 : (c_hotel_requested, t_reserve_hotel) ;
+wed_trigger3 : (c_air_ticket_requested, t_buy_air_ticket);
+wed_trigger4 : (c_request_treated, t_close_travel_request);
+wed_trigger5 : (c_car_requested, t_reserve_car);
+
+@WED-flow
+wf_travel_agency = {G, c_new_travel_request, c_order_finalized};
+
+@AWIC
+W = {c_order_finalized};

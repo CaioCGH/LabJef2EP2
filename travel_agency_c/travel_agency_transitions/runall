@@ -1,0 +1,11 @@
+#!/bin/bash
+
+screen -dmS buy_air_ticket          python3 t_buy_air_ticket.py
+screen -dmS close_travel_request    python3 t_close_travel_request.py
+screen -dmS reserve_car             python3 t_reserve_car.py
+screen -dmS reserve_hotel           python3 t_reserve_hotel.py
+screen -dmS validate_travel_request python3 t_validate_travel_request.py
+
+screen -ls
+
+echo 'There should be 5 screen sessions running!'
