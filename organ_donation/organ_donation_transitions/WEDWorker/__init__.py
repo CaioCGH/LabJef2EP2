@@ -1,0 +1,2 @@
+
+from WEDWorker.WEDWorkerTemplate import WEDWorkerTemplate

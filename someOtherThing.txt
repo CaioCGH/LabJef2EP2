@@ -1,0 +1,11 @@
+c_body_arrival       		:(body_status = 'Arrived' AND body_measure_status = 'Unknown');
+c_approved_extraction		:(body_measure_status = 'Measured' AND consented_project_status = 'Approved' AND material_extraction_status = 'Not done');
+c_finalized_extraction		:(material_extraction_status = 'Finalized' AND validation_status = 'Not validated');
+c_extraction_finalized		:(material_extraction_status = 'Finalized' AND validation_status = 'Validated');
+c_family_accept_interview	:(interview_status = 'Accepted'         AND eligibility_status = 'Unknown');
+c_confirmed_eligibility  	:(eligibility_status = 'Confirmed'      AND chosen_project_status = 'Not chosen' );
+c_chosen_projects        	:(chosen_project_status = 'Chosen'      AND terms_status = 'Not applied');
+c_applied_terms          	:(terms_status = 'Applied'              AND consented_project_status = 'Not approved');
+c_consented_projects     	:(consented_project_status = 'Approved' AND questionary_status = 'Not applied');
+c_interview_finalized    	:(questionary_status = 'Applied'        AND interview_status = 'Accepted');
+

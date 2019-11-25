@@ -1,0 +1,14 @@
+#!/bin/bash
+
+screen -dmS measure_body 	python3 t_measure_body.py
+screen -dmS extract_materials	python3 t_extract_materials.py
+screen -dmS validate_projects	python3 t_validate_projects.py
+screen -dmS verify_eligibility	python3 t_verify_eligibility.py
+screen -dmS choose_projects	python3 t_choose_projects.py
+screen -dmS apply_terms		python3 t_apply_terms.py
+screen -dmS select_consented_projects python3 t_select_consented_projects.py
+screen -dmS apply_questionary	python3 t_apply_questionary.py
+
+screen -ls
+
+echo 'There should be 8 screen sessions running'

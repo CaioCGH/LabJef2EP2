@@ -1,0 +1,69 @@
+create flow organ_donation;
+\cw organ_donation;
+begin;
+
+-- coleta de materiais;
+create wed-attribute body_id;
+create wed-attribute body_status;
+create wed-attribute body_measure_status;
+create wed-attribute material_extraction_status;
+create wed-attribute validation_status;
+
+-- entrevista ;
+create wed-attribute interview_id;
+create wed-attribute interview_status;
+create wed-attribute eligibility_status;
+create wed-attribute project_id;
+create wed-attribute chosen_project_status;
+create wed-attribute terms_id;
+create wed-attribute terms_status;
+create wed-attribute consented_project_id ;
+create wed-attribute consented_project_status;
+create wed-attribute questionary_id;
+create wed-attribute questionary_status;
+
+-- coleta de materiais;
+create wed-condition c_body_arrival        as (body_status = 'Arrived' AND body_measure_status = 'Unknown');
+create wed-condition c_approved_extraction as (body_measure_status = 'Measured' AND consented_project_status = 'Approved' AND material_extraction_status = 'Not done');
+create wed-condition c_finalized_extraction as (material_extraction_status = 'Finalized' AND validation_status = 'Not validated');
+create wed-condition c_extraction_finalized as (material_extraction_status = 'Finalized' AND validation_status = 'Validated');
+
+-- entrevista;
+create wed-condition c_family_accept_interview as (interview_status = 'Accepted'         AND eligibility_status = 'Unknown');
+create wed-condition c_confirmed_eligibility   as (eligibility_status = 'Confirmed'      AND chosen_project_status = 'Not chosen' );
+create wed-condition c_chosen_projects         as (chosen_project_status = 'Chosen'      AND terms_status = 'Not applied');
+create wed-condition c_applied_terms           as (terms_status = 'Applied'              AND consented_project_status = 'Not approved');
+create wed-condition c_consented_projects      as (consented_project_status = 'Approved' AND questionary_status = 'Not applied');
+create wed-condition c_interview_finalized     as (questionary_status = 'Applied'        AND interview_status = 'Accepted');
+
+--coleta de materiais;
+create wed-transition t_measure_body stop on timeout '1h';
+create wed-transition t_extract_materials;
+create wed-transition t_validate_projects;
+
+--entrevista;
+create wed-transition t_verify_eligibility stop on timeout '1h';
+create wed-transition t_choose_projects;
+create wed-transition t_apply_terms;
+create wed-transition t_select_consented_projects;
+create wed-transition t_apply_questionary;
+
+--coleta de materiais;
+create wed-trigger wed_trigger1 as (c_body_arrival, t_measure_body);
+create wed-trigger wed_trigger2 as (c_approved_extraction, t_extract_materials);
+create wed-trigger wed_trigger3 as (c_finalized_extraction, t_validate_projects);
+
+--entrevista;
+create wed-trigger wed_trigger4 as (c_family_accept_interview, t_verify_eligibility);
+create wed-trigger wed_triggiii as (c_confirmed_eligibility, t_choose_projects);
+create wed-trigger wed_trigger6 as (c_chosen_projects, t_apply_terms);
+create wed-trigger wed_trigger7 as (c_applied_terms, t_select_consented_projects);
+create wed-trigger wed_trigger8 as (c_consented_projects, t_apply_questionary);
+
+set final wed-state as (interview_status = 'Finalized' AND material_extraction_status = 'Finalized');
+
+commit;
+
+--create instance as (body_status, body_measure_status, material_extraction_status, validation_status, interview_status, eligibility_status, chosen_project_status, terms_status, consented_project_status, questionary_status)
+ values
+ ('Arrived', 'Unknown', 'Not done', 'Not validated, 'Accepted', 'Unknown', 'Not chosen', 'Not applied', 'Not approved', 'Not applied');

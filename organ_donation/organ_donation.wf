@@ -1,0 +1,80 @@
+@WED-attributes
+A = { body_id,
+ body_status,
+ body_measure_status,
+ material_extraction_status,
+ validation_status,
+ interview_id,
+ interview_status,
+ eligibility_status,
+ project_id,
+ chosen_project_status,
+ terms_id,
+ terms_status,
+ consented_project_id,
+ consented_project_status,
+ questionary_id,
+ questionary_status,
+};
+
+@WED-conditions
+C = { c_approved_extraction,
+ c_finalized_extraction,
+ c_extraction_finalized,
+ c_family_accept_interview,
+ c_confirmed_eligibility,  
+ c_chosen_projects,       
+ c_applied_terms,          
+ c_consented_projects,   
+ c_interview_finalized
+};
+
+c_body_arrival       		:(body_status = 'Arrived' AND body_measure_status = 'Unknown');
+c_approved_extraction		:(body_measure_status = 'Measured' AND consented_project_status = 'Approved' AND material_extraction_status = 'Not done');
+c_finalized_extraction		:(material_extraction_status = 'Finalized' AND validation_status = 'Not validated');
+c_extraction_finalized		:(material_extraction_status = 'Finalized' AND validation_status = 'Validated');
+c_family_accept_interview	:(interview_status = 'Accepted'         AND eligibility_status = 'Unknown');
+c_confirmed_eligibility  	:(eligibility_status = 'Confirmed'      AND chosen_project_status = 'Not chosen' );
+c_chosen_projects        	:(chosen_project_status = 'Chosen'      AND terms_status = 'Not applied');
+c_applied_terms          	:(terms_status = 'Applied'              AND consented_project_status = 'Not approved');
+c_consented_projects     	:(consented_project_status = 'Approved' AND questionary_status = 'Not applied');
+c_interview_finalized    	:(questionary_status = 'Applied'        AND interview_status = 'Accepted');
+
+@WED-transitions
+T = {
+ t_measure_body,
+ t_extract_materials,
+ t_validate_projects,
+ t_verify_eligibility
+ t_choose_projects,
+ t_apply_terms,
+ t_select_consented_projects,
+ t_apply_questionary
+};
+
+t_measure_body: { body_measure_status };
+t_extract_materials: { material_extraction_status };
+t_validate_projects: { chosen-project_status };
+t_verify_eligibility: { eligibility_status };
+t_choose_projects: { choosen_project_status };
+t_apply_terms: { terms_status};
+t_select_consented_projects: { consented_project_status };
+t_apply_questionary: { questionary_status };
+
+
+@WED-triggers
+G = {wed_trigger1, wed_trigger2, wed_trigger3, wed_trigger4, wed_trigger5, wed_trigger6, wed_trigger7, wed_trigger8 };
+wed_trigger1 : (c_body_arrival, t_measure_body);
+wed_trigger2 : (c_approved_extraction, t_extract_materials);
+wed_trigger3 : (c_finalized_extraction, t_validate_projects);
+wed_trigger4 : (c_family_accept_interview, t_verify_eligibility);
+wed_trigger5 : (c_confirmed_eligibility, t_choose_projects);
+wed_trigger6 : (c_chosen_projects, t_apply_terms);
+wed_trigger7 : (c_applied_terms, t_select_consented_projects);
+wed_trigger8 : (c_consented_projects, t_apply_questionary);
+
+@WED-flow
+wf_organ_donation = {G, c_body_arrival, c_interview_finalized};
+
+@AWIC
+W = {c_interview_finalized};
