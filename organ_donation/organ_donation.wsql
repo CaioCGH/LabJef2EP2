@@ -23,10 +23,10 @@ create wed-attribute questionary_id;
 create wed-attribute questionary_status;
 
 -- coleta de materiais;
-create wed-condition c_body_arrival        as (body_status = 'Arrived' AND body_measure_status = 'Unknown');
-create wed-condition c_approved_extraction as (body_measure_status = 'Measured' AND consented_project_status = 'Approved' AND material_extraction_status = 'Not done');
-create wed-condition c_finalized_extraction as (material_extraction_status = 'Finalized' AND validation_status = 'Not validated');
-create wed-condition c_extraction_finalized as (material_extraction_status = 'Finalized' AND validation_status = 'Validated');
+create wed-condition c_body_arrival                 as (body_status = 'Arrived' AND body_measure_status = 'Unknown');
+create wed-condition c_approved_extraction          as (body_measure_status = 'Measured' AND consented_project_status = 'Approved' AND material_extraction_status = 'Not done');
+create wed-condition c_finalized_extraction         as (material_extraction_status = 'Finalized' AND validation_status = 'Not validated');
+create wed-condition c_extraction_process_finalized  as (material_extraction_status = 'Finalized' AND validation_status = 'Validated');
 
 -- entrevista;
 create wed-condition c_family_accept_interview as (interview_status = 'Accepted'         AND eligibility_status = 'Unknown');
@@ -60,7 +60,7 @@ create wed-trigger wed_trigger6 as (c_chosen_projects, t_apply_terms);
 create wed-trigger wed_trigger7 as (c_applied_terms, t_select_consented_projects);
 create wed-trigger wed_trigger8 as (c_consented_projects, t_apply_questionary);
 
-set final wed-state as (interview_status = 'Finalized' AND material_extraction_status = 'Finalized');
+set final wed-state as (questionary_status = 'Applied' AND validation_status = 'Validated');
 
 commit;
 

@@ -19,7 +19,7 @@ class t_validate_projects(WEDWorkerTemplate):
         
         #business logic goes here 
         
-        return "consented_project_status = 'Approved'"
+        return "validation_status = 'Validated'"
         
 w = t_validate_projects()
 

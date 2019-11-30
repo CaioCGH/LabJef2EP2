@@ -1,8 +1,3 @@
- wid | body_id | body_status | body_measure_status | material_extraction_status | validation_status | interview_id | interview_status | eligibility_status | project_id | chosen_project_status | terms_id | terms_status | consented_project_id | consented_project_status | questionary_id | questionary_status | Status
------+---------+-------------+---------------------+----------------------------+-------------------+--------------+------------------+--------------------+------------+-----------------------+----------+--------------+----------------------+--------------------------+----------------+--------------------+--------
-  1  |         |   Arrived   |      Measured       |         Finalized          |     Validated     |              |     Accepted     |     Confirmed      |            |        Chosen         |          |   Applied    |                      |         Approved         |                |      Applied       | Final 
-(1 row)
-
  wid |         Written by          |                     Fired                      |     Status     |         Timestamp          |                                                                                                                                                                                                                                                 WED-state                                                                                                                                                                                                                                                 
 -----+-----------------------------+------------------------------------------------+----------------+----------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   1  |           _INIT_            |   ['t_measure_body', 't_verify_eligibility']   | Transactioning | 2019-11-30 18:22:08.161428 |  {'body_id': None, 'body_status': 'Arrived', 'body_measure_status': 'Unknown', 'material_extraction_status': 'Not done', 'validation_status': 'Not validated', 'interview_id': None, 'interview_status': 'Accepted', 'eligibility_status': 'Unknown', 'project_id': None, 'chosen_project_status': 'Not chosen', 'terms_id': None, 'terms_status': 'Not applied', 'consented_project_id': None, 'consented_project_status': 'Not approved', 'questionary_id': None, 'questionary_status': 'Not applied'}  
@@ -15,47 +10,4 @@
   1  |     t_extract_materials     |            ['t_validate_projects']             | Transactioning | 2019-11-30 18:22:08.510708 |        {'body_id': None, 'body_status': 'Arrived', 'body_measure_status': 'Measured', 'material_extraction_status': 'Finalized', 'validation_status': 'Not validated', 'interview_id': None, 'interview_status': 'Accepted', 'eligibility_status': 'Confirmed', 'project_id': None, 'chosen_project_status': 'Chosen', 'terms_id': None, 'terms_status': 'Applied', 'consented_project_id': None, 'consented_project_status': 'Approved', 'questionary_id': None, 'questionary_status': 'Applied'}        
   1  |     t_validate_projects     |                       []                       |     Final      | 2019-11-30 18:22:08.621220 |          {'body_id': None, 'body_status': 'Arrived', 'body_measure_status': 'Measured', 'material_extraction_status': 'Finalized', 'validation_status': 'Validated', 'interview_id': None, 'interview_status': 'Accepted', 'eligibility_status': 'Confirmed', 'project_id': None, 'chosen_project_status': 'Chosen', 'terms_id': None, 'terms_status': 'Applied', 'consented_project_id': None, 'consented_project_status': 'Approved', 'questionary_id': None, 'questionary_status': 'Applied'}          
 (9 rows)
-
-
-
-
-create instance as (
-body_status,
-body_measure_status,
-material_extraction_status,
-validation_status,
-interview_status,
-eligibility_status,
-chosen_project_status,
-terms_status,
-consented_project_status,
-questionary_status)values(
-'Arrived',
-'Unknown',
-'Not done',
-'Not validated',
-'Accepted',
-'Unknown',
-'Not chosen',
-'Not applied',
-'Not approved',
-'Not applied'
-);
-
-
-create instance as (
-body_status,
-body_measure_status,
-interview_status,
-eligibility_status)
-values (
-'Arrived',
-'Unknown',
-'Accepted',
-'Unknown');
-
-
-create instance as (body_status, body_measure_status, material_extraction_status, validation_status, interview_status, eligibility_status, chosen_project_status, terms_status, consented_project_status, questionary_status) values ('Arrived', 'Unknown', 'Not done', 'Not validated', 'Accepted', 'Unknown',
-'Not chosen', 'Not applied', 'Not approved', 'Not applied');
-
 

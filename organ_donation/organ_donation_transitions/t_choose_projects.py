@@ -19,7 +19,7 @@ class t_choose_projects(WEDWorkerTemplate):
         
         #business logic goes here 
         
-        return "choosen_project_status = 'Chosen'"
+        return "chosen_project_status = 'Chosen'"
         
 w = t_choose_projects()
 
